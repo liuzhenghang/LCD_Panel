@@ -1,0 +1,9 @@
+body{padding: 0;margin: 0;background: #eeeeee;height: 100%;}
+#main{
+    padding: 30px;
+    height: 100%;
+}
+.deviceBox{
+    line-height: 50px;
+    font-size: large;
+}

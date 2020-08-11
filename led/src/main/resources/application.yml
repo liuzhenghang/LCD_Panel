@@ -1,0 +1,89 @@
+server:
+  port: 8800
+spring:
+  thymeleaf:
+    encoding: UTF-8
+    prefix: file:./templates/
+  # 配置数据源，数据库 MySQL5.7
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/led?useUnicode=ture&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: led
+    password: ledadmin
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 30000
+#    用户和设备关系表。缓存
+    devices-user: device
+#    消息队列
+    message: message
+#    邮箱消息计数的前缀，后边加用户id
+    mail-message: mail
+#    暂存设备状态，下次查阅的时候提供加速
+    state: state
+#    暂存在线设备列表的前缀，下次查阅加速
+    online: online
+#    用户登录使用token的哈希表
+    token: token
+##################
+#  MQTT 配置
+##################
+# 用户名
+mqtt:
+  username: springServer
+  # 密码
+  password: password
+  # 推送信息的连接地址，如果有多个，用逗号隔开，如：tcp://127.0.0.1:61613,tcp://192.168.1.61:61613
+  url: tcp://localhost:1883
+  ##################
+  #  MQTT 生产者
+  ##################
+  # 连接服务器默认客户端ID
+  producer:
+    clientId: Server
+  # 默认的推送主题，实际可在调用接口时指定
+    defaultTopic: topic1
+  ##################
+  #  MQTT 消费者
+  ##################
+  # 连接服务器默认客户端ID
+  consumer:
+    clientId: springServer
+  # 默认的接收主题，可以订阅多个Topic，逗号分隔
+    defaultTopic: Server
+# mybatis-plus相关配置,请不要随意更改
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: shutdown
+mybatis-plus:
+  # xml扫描
+  mapper-locations: classpath:mapper/*.xml
+  # 以下配置均有默认值,可以不设置
+  global-config:
+    db-config:
+      #主键类型 AUTO:"数据库ID自增" INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: auto
+      #字段策略 IGNORED:"忽略判断"  NOT_NULL:"非 NULL 判断")  NOT_EMPTY:"非空判断"
+      field-strategy: NOT_EMPTY
+      #数据库类型
+      db-type: MYSQL
+  configuration:
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    call-setters-on-nulls: true
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

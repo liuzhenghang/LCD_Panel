@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/jquery-3.4.1.js"></script>
+    <script src="/layui-v2.5.6/layui/layui.js"></script>
+    <script src="/vue.js"></script>
+    <script src="/start.js"></script>
+    <script src="/function.js"></script>
+<!--    <script src="/element/index.js"></script>-->
+    <script src="/layer/layer.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        @import "css.css";
+        /*@import "element/index.css";*/
+        @import "layui-v2.5.6/layui/css/layui.css";
+        @import "layer/theme/default/layer.css";
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="home">
+        <h1>{{USERNAME}}</h1>
+        <hr class="layui-bg-orange">
+        <div class="layui-card" v-for="(item,i) in device" @click="getOne(i,false)">
+            <div class="layui-card-header">
+                {{item.name}}
+                <span v-if="item.online" class="layui-badge layui-bg-green">在线</span>
+                <span v-if="!item.online" class="layui-badge layui-bg-black">离线</span>
+            </div>
+            <div class="layui-card-body">
+                活跃时间：{{item.date}}<br>
+            </div>
+        </div>
+        <button onclick="bindDevice()" type="button"
+                class="layui-btn layui-btn-fluid layui-btn-primary">添加设备</button>
+    </div>
+    <div class="home">
+        <div v-if="nowDevice>-1">
+
+
+        <h1 onclick="openPanel(0)"><a class="layui-icon layui-icon-return"></a>{{device[nowDevice].name}}</h1>
+        <span class="layui-badge-rim">MAC地址  {{device[nowDevice].mac}}</span>
+        <span v-if="device[nowDevice].online" class="layui-badge layui-bg-green">在线</span>
+        <span v-if="!device[nowDevice].online" class="layui-badge layui-bg-black">离线</span>
+        <hr class="layui-bg-orange">
+        <fieldset class="layui-elem-field">
+            <legend>详情</legend>
+            <div class="layui-field-box deviceBox">
+                活跃时间：{{device[nowDevice].date}}
+                <br/>
+                签名：{{device[nowDevice].text}}
+                <button @click="upText()" type="button" class="layui-btn layui-btn-xs layui-btn-primary">
+                    <i class="layui-icon">&#xe642;</i>
+                </button>
+                <br/>
+                固件版本：{{device[nowDevice].version}}
+                <br/>
+            </div>
+            <button @click="unBindDevice()" type="button" class="layui-btn  layui-btn-danger layui-btn-fluid">解绑设备</button>
+        </fieldset>
+        </div>
+    </div>
+    <div id="login" class="home">
+        <h1>登录/注册</h1>
+        <hr class="layui-bg-orange">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">你的邮箱</label>
+                <div class="layui-input-block">
+                    <input v-model="mail" type="text" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-form-pane" v-if="RegisterPanel">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">用户昵称</label>
+                <div class="layui-input-block">
+                    <input v-model="username" type="text" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-form-pane">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">输入密码</label>
+                <div class="layui-input-block">
+                    <input v-model="passwordA" type="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form layui-form-pane" v-if="RegisterPanel">
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">再次输入</label>
+                <div class="layui-input-block">
+                    <input v-model="passwordB" type="password" placeholder="再输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <button type="button" onclick="login()" class="layui-btn layui-btn-primary layui-btn-fluid">登录</button>
+        <br/>
+        <button type="button" onclick="register()" class="layui-btn layui-btn-primary layui-btn-fluid">注册</button>
+    </div>
+</div>
+</body>
+<script>
+    startVue();
+</script>
+</html>
